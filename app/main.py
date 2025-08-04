@@ -1,7 +1,9 @@
-from fastapi import FastAPI, HTTPException
+from fastapi import FastAPI, HTTPException, Depends
 from app.config import settings
 from app.services.tika import TikaService
 from app.api.models import HealthResponse
+from app.core.security import validate_api_key
+
 
 app = FastAPI(
     title=settings.APP_NAME,
@@ -9,6 +11,7 @@ app = FastAPI(
     version="1.0.0"
 )
 
+# Public endpoints (no auth required)
 @app.get("/health", tags=["Health"], response_model=HealthResponse)
 async def health_check():
     tika_service = TikaService()
@@ -21,3 +24,8 @@ async def health_check():
         "status": "healthy",
         "service": settings.APP_NAME
     }
+
+# Protected endpoint example (will be used in Phase 4)
+@app.get("/protected", dependencies=[Depends(validate_api_key)])
+async def protected_route():
+    return {"message": "You have access to protected route"}
