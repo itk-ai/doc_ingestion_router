@@ -1,0 +1,17 @@
+[project]
+name = "doc-ingestion-router"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+authors = [
+    { name = "Daniel Andreasen", email = "akda@aarhus.dk" }
+]
+requires-python = ">=3.13"
+dependencies = []
+
+[project.scripts]
+doc-ingestion-router = "doc_ingestion_router:main"
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
