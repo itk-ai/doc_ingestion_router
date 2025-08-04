@@ -1,7 +1,9 @@
-from pydantic_settings import BaseSettings
+from pydantic_settings import BaseSettings, SettingsConfigDict
 from urllib.parse import urlparse, urlunparse
 
 class Settings(BaseSettings):
+    model_config = SettingsConfigDict(env_file='.env', env_file_encoding='utf-8')
+
     TIKA_BASE_URL: str
     API_KEY: str
     TIKA_USER: str
@@ -21,8 +23,5 @@ class Settings(BaseSettings):
             parsed.query,
             parsed.fragment
         ))
-
-    class Config:
-        env_file = ".env"
 
 settings = Settings()
