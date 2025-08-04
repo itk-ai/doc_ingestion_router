@@ -6,10 +6,10 @@ The current [`TikaLoader` class](https://github.com/open-webui/open-webui/blob/5
 
 ```python
 class TikaLoader:
-def __init__(self, url, file_path, mime_type=None, extract_images=None):
-self.url = url
-self.file_path = file_path
-self.mime_type = mime_type
+    def __init__(self, url, file_path, mime_type=None, extract_images=None):
+        self.url = url
+        self.file_path = file_path
+        self.mime_type = mime_type
 
         self.extract_images = extract_images
 
