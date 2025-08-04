@@ -3,7 +3,7 @@ import requests
 
 class TikaService:
     def __init__(self):
-        self.base_url = settings.TIKA_BASE_URL.rstrip('/')
+        self.base_url = settings.tika_url_with_auth.rstrip('/')
 
     async def is_available(self) -> bool:
         try:
