@@ -8,3 +8,9 @@ class HealthResponse(BaseModel):
 class DocumentResponse(BaseModel):
     page_content: str
     metadata: Dict[str, Any]
+
+# Not used at this point
+# TODO: Check if used by end of vibe coding
+class TikaError(BaseModel):
+    detail: str
+    status_code: int
