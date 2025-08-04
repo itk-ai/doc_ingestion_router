@@ -7,7 +7,15 @@ authors = [
     { name = "Daniel Andreasen", email = "akda@aarhus.dk" }
 ]
 requires-python = ">=3.13"
-dependencies = []
+dependencies = [
+    "fastapi>=0.116.1",
+    "httpx>=0.28.1",
+    "pydantic>=2.11.7",
+    "pytest>=8.4.1",
+    "python-multipart>=0.0.20",
+    "requests>=2.32.4",
+    "uvicorn>=0.35.0",
+]
 
 [project.scripts]
 doc-ingestion-router = "doc_ingestion_router:main"
