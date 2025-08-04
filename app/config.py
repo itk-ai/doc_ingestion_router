@@ -4,11 +4,13 @@ from urllib.parse import urlparse, urlunparse
 class Settings(BaseSettings):
     model_config = SettingsConfigDict(env_file='.env', env_file_encoding='utf-8')
 
-    TIKA_BASE_URL: str
+    APP_NAME: str = "Document Ingestion Router"
+
     API_KEY: str
+
+    TIKA_BASE_URL: str
     TIKA_USER: str
     TIKA_PASSWORD: str
-    APP_NAME: str = "Document Ingestion Router"
 
     @property
     def tika_url_with_auth(self) -> str:
