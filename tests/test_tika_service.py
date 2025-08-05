@@ -1,6 +1,7 @@
 import pytest
 from app.services.tika import TikaService
 from unittest.mock import Mock, patch
+from fastapi import HTTPException
 
 
 @pytest.fixture
