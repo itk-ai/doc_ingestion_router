@@ -4,5 +4,7 @@ pydantic
 pydantic-settings
 python-multipart
 requests
-pytest
 httpx
+pytest
+pytest-asyncio
+pytest-mock
