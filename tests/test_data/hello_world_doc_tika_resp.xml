@@ -1,0 +1,51 @@
+<?xml version="1.1" encoding="UTF-8"?><html xmlns="http://www.w3.org/1999/xhtml">
+    
+    <head>
+        
+        <meta name="cp:revision" content="2"/>
+        
+        <meta name="meta:word-count" content="1"/>
+        
+        <meta name="extended-properties:Application" content="Microsoft Office Word"/>
+        
+        <meta name="meta:last-author" content="Daniel Kjeldsmark Andreasen"/>
+        
+        <meta name="dc:creator" content="Daniel Kjeldsmark Andreasen"/>
+        
+        <meta name="extended-properties:Company" content="Aarhus Kommune"/>
+        
+        <meta name="xmpTPg:NPages" content="1"/>
+        
+        <meta name="dcterms:created" content="2025-08-05T10:34:00Z"/>
+        
+        <meta name="dcterms:modified" content="2025-08-05T10:34:00Z"/>
+        
+        <meta name="meta:character-count" content="12"/>
+        
+        <meta name="extended-properties:Template" content="Normal.dotm"/>
+        
+        <meta name="X-TIKA:Parsed-By" content="org.apache.tika.parser.CompositeParser"/>
+        
+        <meta name="X-TIKA:Parsed-By" content="org.apache.tika.parser.DefaultParser"/>
+        
+        <meta name="X-TIKA:Parsed-By" content="org.apache.tika.parser.microsoft.OfficeParser"/>
+        
+        <meta name="extended-properties:TotalTime" content="0"/>
+        
+        <meta name="Content-Length" content="25088"/>
+        
+        <meta name="meta:page-count" content="1"/>
+        
+        <meta name="Content-Type-Override" content="application/msword"/>
+        
+        <meta name="Content-Type" content="application/msword"/>
+        
+        <title>&#0;</title>
+        
+    </head>
+    
+    <body>
+        <p>Hello world!</p>
+        
+    </body>
+</html>

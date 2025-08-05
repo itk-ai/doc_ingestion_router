@@ -1,0 +1,42 @@
+{
+  "pdf:unmappedUnicodeCharsPerPage": "0",
+  "pdf:PDFVersion": "1.4",
+  "pdf:docinfo:title": "Hallo World!",
+  "pdf:hasXFA": "false",
+  "access_permission:modify_annotations": "true",
+  "X-TIKA:Parsed-By-Full-Set": [
+    "org.apache.tika.parser.CompositeParser",
+    "org.apache.tika.parser.DefaultParser",
+    "org.apache.tika.parser.pdf.PDFParser"
+  ],
+  "pdf:num3DAnnotations": "0",
+  "dc:format": "application/pdf; version=1.4",
+  "pdf:overallPercentageUnmappedUnicodeChars": "0.0",
+  "access_permission:fill_in_form": "true",
+  "pdf:hasCollection": "false",
+  "pdf:encrypted": "false",
+  "dc:title": "Hallo World!",
+  "pdf:containsNonEmbeddedFont": "true",
+  "Content-Length": "759",
+  "pdf:hasMarkedContent": "false",
+  "Content-Type-Override": "application/pdf",
+  "pdf:ocrPageCount": "0",
+  "Content-Type": "application/pdf",
+  "access_permission:can_print_faithful": "true",
+  "pdf:totalUnmappedUnicodeChars": "0",
+  "access_permission:extract_for_accessibility": "true",
+  "access_permission:assemble_document": "true",
+  "xmpTPg:NPages": "1",
+  "pdf:hasXMP": "false",
+  "pdf:charsPerPage": "12",
+  "access_permission:extract_content": "true",
+  "access_permission:can_print": "true",
+  "X-TIKA:Parsed-By": [
+    "org.apache.tika.parser.CompositeParser",
+    "org.apache.tika.parser.DefaultParser",
+    "org.apache.tika.parser.pdf.PDFParser"
+  ],
+  "X-TIKA:content": "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nHallo World!\n\n\nHallo World!\n\n\n",
+  "access_permission:can_modify": "true",
+  "pdf:containsDamagedFont": "false"
+}

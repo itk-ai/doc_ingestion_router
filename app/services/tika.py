@@ -4,6 +4,8 @@ from typing import Dict, Any, Tuple
 import mimetypes
 import logging
 from fastapi import HTTPException
+from html2text import HTML2Text
+import magic
 
 logger = logging.getLogger(__name__)
 
@@ -22,17 +24,17 @@ class TikaService:
     #   the owui_ingestion_test using magic.from_buffer and the containers (apt install) libmagic1
     def _detect_mime_type(self, file_content: bytes, filename: str = None) -> str:
         """
-        Detect MIME type using Tika's detect endpoint, falling back to Python's mimetypes
+        Determine MIME type using multiple methods.
         """
         try:
-            response = requests.put(
-                f"{self.base_url}/detect/stream",
-                data=file_content
-            )
-            if response.ok:
-                return response.text
+            # Use python-magic to get MIME type from file content
+            mime_type = magic.from_buffer(file_content, mime=True)
+            return mime_type
         except Exception as e:
-            logger.warning(f"Tika MIME detection failed: {str(e)}")
+            if filename is not None:
+                print(f"Error detecting MIME type for {filename}: {str(e)}")
+            else:
+                print(f"Error detecting MIME type: {str(e)}")
 
         # Fallback to Python's mimetype detection
         if filename:
@@ -95,10 +97,9 @@ class TikaService:
                     text = "<No text content found>"
             else:
                 # HTML response that needs to be converted to markdown
-                from html2text import HTML2Text
                 h = HTML2Text()
                 h.ignore_links = False
-                text = h.handle(response.text)
+                text = h.handle(response.text).strip()
                 metadata = {"Content-Type": mime_type}
                 if filename:
                     metadata["X-Filename"] = filename
