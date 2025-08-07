@@ -92,7 +92,7 @@ class TikaService:
             if endpoint == "tika/text":
                 # Plain text response
                 metadata = response.json()
-                text = metadata.get("X-TIKA:content", "").strip()
+                text = metadata.pop("X-TIKA:content", "").strip()
                 if not text:
                     text = "<No text content found>"
             else:
