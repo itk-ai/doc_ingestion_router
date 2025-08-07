@@ -1,8 +1,9 @@
-from fastapi import FastAPI, HTTPException, Depends
+from fastapi import FastAPI, HTTPException
 from app.config import settings
 from app.services.tika import TikaService
 from app.api.models import HealthResponse
-from app.core.security import validate_api_key
+from app.api.endpoints import router as api_router
+
 
 
 app = FastAPI(
@@ -25,7 +26,5 @@ async def health_check():
         "service": settings.APP_NAME
     }
 
-# Protected endpoint example (will be used in Phase 4)
-@app.get("/protected", dependencies=[Depends(validate_api_key)])
-async def protected_route():
-    return {"message": "You have access to protected route"}
+# Include the API router
+app.include_router(api_router, prefix="/api/v1")
