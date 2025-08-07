@@ -134,3 +134,32 @@ This is co-created with the pycharm AI assistant using the Claude 3.5 Sonnet.
 - The summary of the project requirements can be seen [here](AI_project_description.md)
 - The [AI suggested project structure](AI_project_structure.md)
 - The [AI project implementation plan](AI_project_implementation_plan.md)
+
+## Testing the docker image
+
+To test this setup:
+1. Build and start the services:
+    ``` bash
+    docker compose up --build -d
+    ```
+2. Test the health endpoint:
+    ``` bash
+    curl http://localhost:8000/health
+    ```
+3. Test the process endpoint:
+    ``` bash
+    curl -X PUT \
+      http://localhost:8000/api/v1/process \
+      -H "Authorization: Bearer <api_key>" \
+      -H "Content-Type: text/plain" \
+      -d "test content"
+    ```
+4. And with a pdf test doc
+    ``` bash
+    curl -X PUT \
+      http://localhost:8000/api/v1/process \
+      -H "Authorization: Bearer default_dev_key" \
+      -H "Content-Type: application/pdf" \
+      -H "X-Filename: test.pdf" \
+      --data-binary @tests/test_data/aarhusdk_example.pdf
+    ```

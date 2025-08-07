@@ -1,0 +1,44 @@
+services:
+  app:
+    build: .
+    ports:
+      - "8000:8000"
+    environment:
+      - API_KEY=${API_KEY:-default_dev_key}
+      - APP_NAME=${APP_NAME:-Document Ingestion Router}
+    profiles:
+      - dev
+      - prod
+
+
+  # Development configuration
+  app-dev:
+    extends:
+      service: app
+    environment:
+      - TIKA_BASE_URL=http://tika:9998
+      - TIKA_USER=""
+      - TIKA_PASSWORD=""
+    volumes:
+      - .:/app  # Mount local code for development
+    depends_on:
+      - tika
+    profiles:
+      - dev
+
+  # Production configuration
+  app-prod:
+    extends:
+      service: app
+    environment:
+      - TIKA_BASE_URL=${TIKA_BASE_URL}
+    profiles:
+      - prod
+
+  # Local Tika container for development
+  tika:
+    image: apache/tika:latest
+    ports:
+      - "9998:9998"
+    profiles:
+      - dev
