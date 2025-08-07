@@ -3,6 +3,7 @@ import requests
 from typing import Dict, Any, Tuple
 import mimetypes
 import logging
+# TODO: Add logging of what is requested and where it is sent to
 from fastapi import HTTPException
 from html2text import HTML2Text
 import magic
