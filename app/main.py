@@ -5,7 +5,6 @@ from app.api.models import HealthResponse
 from app.api.endpoints import router as api_router
 
 
-
 app = FastAPI(
     title=settings.APP_NAME,
     description="A service to route document loading requests to appropriate Tika endpoints",
