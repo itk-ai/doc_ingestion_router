@@ -7,7 +7,7 @@ import dotenv
 dotenv.load_dotenv()
 TEST_PORT = os.getenv("TEST_PORT", "8000")
 BASE_URL = f"http://localhost:{TEST_PORT}/api/v1"
-API_KEY = os.getenv("API_KEY", "default_dev_key")
+API_KEY = os.getenv("API_KEY", "default_test_key")
 APP_NAME = os.getenv("APP_NAME", "Document Ingestion Router")
 TEST_DATA_DIR = Path(__file__).parent / "test_data"
 

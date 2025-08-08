@@ -4,7 +4,7 @@ services:
     ports:
       - "${PORT:-8000}:8000"
     environment:
-      - API_KEY=${API_KEY:-default_dev_key}
+      - API_KEY=${API_KEY:-default_test_key}
       - APP_NAME=${APP_NAME:-Document Ingestion Router}
     profiles:
       - base-only # To prevent this from starting by default

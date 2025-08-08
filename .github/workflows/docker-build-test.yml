@@ -67,6 +67,11 @@ jobs:
       - name: Run pytest
         env:
           TEST_PORT: ${{ env.TEST_PORT }}
+          API_KEY: default_test_key
+          APP_NAME: Document Ingestion Router
+          TIKA_USER: dummy
+          TIKA_PASSWORD: dummy
+          TIKA_BASE_URL: http://dummy.url
         run: |
           pytest -v tests/test_integration.py
 
