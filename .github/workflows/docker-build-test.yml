@@ -73,9 +73,11 @@ jobs:
           TIKA_PASSWORD: dummy
           TIKA_BASE_URL: http://dummy.url
         run: |
-          pytest -v tests/test_integration.py
-          docker compose logs
+          pytest -v tests/test_integration.py --verbose
+          docker compose --profile dev logs
 
+      - name: Check compose logs
+        run: docker compose --profile dev logs
 
       - name: Push Docker image
         if: github.event_name != 'pull_request'
