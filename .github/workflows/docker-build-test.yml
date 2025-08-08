@@ -9,6 +9,7 @@ on:
 env:
   REGISTRY: ghcr.io
   IMAGE_NAME: ${{ github.repository }}
+  TEST_PORT: 49222
 
 jobs:
   build-and-test:
@@ -58,11 +59,15 @@ jobs:
           labels: ${{ steps.meta.outputs.labels }}
 
       - name: Start services with Docker Compose
+        env:
+          PORT: ${{ env.TEST_PORT }}
         run: |
           docker compose --profile dev up -d
           sleep 10  # Give services time to start
 
       - name: Run pytest
+        env:
+          TEST_PORT: ${{ env.TEST_PORT }}
         run: |
           pytest -v tests/test_integration.py
 

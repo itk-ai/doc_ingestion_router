@@ -2,7 +2,7 @@ services:
   app:
     build: .
     ports:
-      - "8000:8000"
+      - "${PORT:-8000}:8000"
     environment:
       - API_KEY=${API_KEY:-default_dev_key}
       - APP_NAME=${APP_NAME:-Document Ingestion Router}

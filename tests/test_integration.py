@@ -5,7 +5,8 @@ from pathlib import Path
 import dotenv
 
 dotenv.load_dotenv()
-BASE_URL = "http://localhost:8000/api/v1"
+TEST_PORT = os.getenv("TEST_PORT", "8000")
+BASE_URL = f"http://localhost:{TEST_PORT}/api/v1"
 API_KEY = os.getenv("API_KEY", "default_dev_key")
 APP_NAME = os.getenv("APP_NAME", "Document Ingestion Router")
 TEST_DATA_DIR = Path(__file__).parent / "test_data"
