@@ -11,7 +11,10 @@ API_KEY = os.getenv("API_KEY", "default_test_key")
 APP_NAME = os.getenv("APP_NAME", "Document Ingestion Router")
 TEST_DATA_DIR = Path(__file__).parent / "test_data"
 
-resp = requests.get(f"http://localhost:{TEST_PORT}/health")
+try:
+    resp = requests.get(f"http://localhost:{TEST_PORT}/health")
+except requests.exceptions.ConnectionError:
+    pytest.skip("The local service have not spun up.", allow_module_level=True)
 
 pytestmark = pytest.mark.skipif(
     (resp.status_code != 200 | resp.json()["service"] != APP_NAME),

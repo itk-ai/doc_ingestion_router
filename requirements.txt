@@ -5,6 +5,8 @@ pydantic
 pydantic-settings
 python-multipart
 
+loguru
+
 requests
 httpx
 

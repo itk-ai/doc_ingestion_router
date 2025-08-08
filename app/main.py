@@ -3,6 +3,7 @@ from app.config import settings
 from app.services.tika import TikaService
 from app.api.models import HealthResponse
 from app.api.endpoints import router as api_router
+from loguru import logger
 
 
 app = FastAPI(
@@ -20,6 +21,7 @@ async def health_check():
     if not tika_available:
         raise HTTPException(status_code=503, detail="Tika service is not available")
 
+    logger.info(f"A health check was requested. Tika service, and service {settings.APP_NAME} is up and running.")
     return {
         "status": "healthy",
         "service": settings.APP_NAME

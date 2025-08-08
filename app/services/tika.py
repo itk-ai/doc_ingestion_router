@@ -2,13 +2,11 @@ from app.config import settings
 import requests
 from typing import Dict, Any, Tuple
 import mimetypes
-import logging
+from loguru import logger
 # TODO: Add logging of what is requested and where it is sent to
 from fastapi import HTTPException
 from html2text import HTML2Text
 import magic
-
-logger = logging.getLogger(__name__)
 
 class TikaService:
     def __init__(self):
@@ -30,6 +28,7 @@ class TikaService:
         try:
             # Use python-magic to get MIME type from file content
             mime_type = magic.from_buffer(file_content, mime=True)
+            logger.info(f"Detected MIME using system magic type: {mime_type}")
             return mime_type
         except Exception as e:
             if filename is not None:
@@ -40,8 +39,11 @@ class TikaService:
         # Fallback to Python's mimetype detection
         if filename:
             guessed_type = mimetypes.guess_type(filename)[0]
+            logger.info(f"Detected MIME using Python's mimetype: {guessed_type}")
             if guessed_type:
                 return guessed_type
+
+        logger.warning(f"Failed to detect MIME type using application/octet-stream as a fallback.")
 
         return "application/octet-stream"
 
@@ -49,11 +51,13 @@ class TikaService:
         """
         Choose appropriate Tika endpoint based on MIME type
         """
+        # All documents beside pdfs should use the main tika endpoint for HTML output
+        endpoint = "tika"
         # PDF documents should use the text endpoint
         if mime_type == "application/pdf":
-            return "tika/text"
-        # All other documents use the main tika endpoint for HTML output
-        return "tika"
+            endpoint = "tika/text"
+        logger.info(f"Using Tika endpoint: {endpoint} for MIME type: {mime_type}")
+        return endpoint
 
     async def process_document(
             self,
@@ -64,6 +68,17 @@ class TikaService:
         """
         Process document through appropriate Tika endpoint
         """
+        logger_msg = "Processing document"
+        if provided_mime_type:
+            logger_msg += f" of MIME type {provided_mime_type}"
+        if filename:
+            logger_msg += f" with name {filename}"
+        else:
+            content = file_content.decode('utf-8', 'ignore')
+            content_len = len(content)
+            content = content[:min(1024, content_len)]
+            logger_msg += f" which content starts with:\n{content}"
+        logger.info(logger_msg)
         try:
             # Use provided MIME type or detect it
             mime_type = provided_mime_type or self._detect_mime_type(file_content, filename)

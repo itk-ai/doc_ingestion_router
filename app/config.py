@@ -1,5 +1,6 @@
 from pydantic_settings import BaseSettings, SettingsConfigDict
 from urllib.parse import urlparse, urlunparse
+from loguru import logger
 
 class Settings(BaseSettings):
     model_config = SettingsConfigDict(env_file='.env', env_file_encoding='utf-8')
@@ -27,3 +28,4 @@ class Settings(BaseSettings):
         ))
 
 settings = Settings()
+logger.info(f"Loaded settings: {settings.model_dump(exclude=['API_KEY', 'TIKA_PASSWORD'])}")
