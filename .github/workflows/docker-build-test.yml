@@ -74,6 +74,7 @@ jobs:
           TIKA_BASE_URL: http://dummy.url
         run: |
           pytest -v tests/test_integration.py
+          docker compose logs
 
 
       - name: Push Docker image

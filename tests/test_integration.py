@@ -3,6 +3,7 @@ import pytest
 import requests
 from pathlib import Path
 import dotenv
+from loguru import logger
 
 dotenv.load_dotenv()
 TEST_PORT = os.getenv("TEST_PORT", "8000")
@@ -13,11 +14,12 @@ TEST_DATA_DIR = Path(__file__).parent / "test_data"
 
 try:
     resp = requests.get(f"http://localhost:{TEST_PORT}/health")
+    logger.info(f"Health check response: {resp.json()}")
 except requests.exceptions.ConnectionError:
     pytest.skip("The local service have not spun up.", allow_module_level=True)
 
 pytestmark = pytest.mark.skipif(
-    (resp.status_code != 200 | resp.json()["service"] != APP_NAME),
+    ((resp.status_code != 200) or (resp.json()["service"] != APP_NAME)),
     reason="The local service have not spun up.")
 
 def process_document(file_path: Path) -> requests.Response:
