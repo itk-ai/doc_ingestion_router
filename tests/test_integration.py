@@ -32,7 +32,7 @@ def process_document(file_path: Path) -> requests.Response:
     with open(file_path, "rb") as f:
         content = f.read()
 
-    return requests.put(f"{BASE_URL}/process", content=content, headers=headers)
+    return requests.put(f"{BASE_URL}/process", data=content, headers=headers)
 
 def test_process_pdf_document():
     """Test processing a PDF document"""
@@ -65,16 +65,14 @@ def test_process_docx_document():
 
 def test_invalid_api_key():
     """Test that invalid API key is rejected"""
-    pdf_file = TEST_DATA_DIR / "sample.pdf"
     headers = {
         "Authorization": "Bearer invalid_key",
-        "X-Filename": pdf_file.name
+        "X-Filename": "empty.pdf"
     }
+    # See https://unix.stackexchange.com/a/277967 for empty pdf content
+    empty_pdf_content = b'%PDF-1.4\n1 0 obj<</Type/Catalog/Pages 2 0 R>>endobj\n2 0 obj<</Type/Pages/Count 1/Kids[3 0 R]>>endobj\n3 0 obj<</Type/Page/MediaBox[0 0 612 792]/Parent 2 0 R/Resources<<>>>>endobj\nxref\n0 4\n0000000000 65535 f \n0000000009 00000 n \n0000000052 00000 n \n0000000101 00000 n \ntrailer<</Size 4/Root 1 0 R>>\nstartxref\n178\n%%EOF\n'
 
-    with open(pdf_file, "rb") as f:
-        content = f.read()
-
-    response = requests.put(f"{BASE_URL}/process", content=content, headers=headers)
+    response = requests.put(f"{BASE_URL}/process", data=empty_pdf_content, headers=headers)
     assert response.status_code == 401
 
 
@@ -87,6 +85,6 @@ def test_empty_document():
         "X-Filename": "empty.txt"
     }
 
-    response = requests.put(f"{BASE_URL}/process", content="", headers=headers)
+    response = requests.put(f"{BASE_URL}/process", data="", headers=headers)
     assert response.status_code == 400
     assert "No content provided" in response.json()["detail"]
