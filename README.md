@@ -163,3 +163,70 @@ To test this setup:
       -H "X-Filename: test.pdf" \
       --data-binary @tests/test_data/aarhusdk_example.pdf
     ```
+   
+## Environment variables
+
+See [template.env](template.env) for the needed environment variables 
+
+## API Endpoints
+
+### Flow Diagram
+
+```mermaid
+%% Health Check Flow
+Client->>Router: GET /health
+Router-->>Client: 200 OK {service, status}
+
+%% Document Processing Flow
+Note over Client,Router: PUT /api/v1/process
+Client->>Router: Document + Headers
+Note right of Client: Required Headers:<br/>- Authorization: Bearer {api_key}<br/>- X-Filename: {filename}
+
+alt Invalid API Key
+    Router-->>Client: 401 Unauthorized
+else Empty Document
+    Router-->>Client: 400 Bad Request
+else Valid Request
+    Router->>Router: Detect MIME type
+    alt PDF Document
+        Router->>Tika: PUT /tika/text
+    else Other Document Types
+        Router->>Tika: PUT /tika
+    end
+    Tika-->>Router: Extracted Content
+    Router->>Router: Format Response
+    Router-->>Client: 200 OK {content, metadata}
+end
+```
+
+### Endpoints Details
+
+1. **Health Check**
+   - Endpoint: `GET /health`
+   - Response: `{"service": "Document Ingestion Router", "status": "healthy"}`
+   - No authentication required
+
+2. **Document Processing**
+   - Endpoint: `PUT /api/v1/process`
+   - Headers:
+     - `Authorization: Bearer {api_key}` - Required for authentication
+     - `X-Filename: {filename}` - Name of the file being processed
+     - `Content-Type: {mime_type}` - Optional, will be auto-detected if not provided
+   - Body: Raw document content
+   - Response:
+     ```json
+     {
+       "success": true,
+       "content": {
+         "page_content": "extracted text content",
+         "metadata": {
+           "Content-Type": "detected/mime-type",
+           "other": "metadata fields"
+         }
+       }
+     }
+     ```
+   - Error Responses:
+     - 401: Invalid or missing API key
+     - 400: Empty document or invalid request
+     - 500: Processing error
