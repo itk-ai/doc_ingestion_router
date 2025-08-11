@@ -172,31 +172,44 @@ See [template.env](template.env) for the needed environment variables
 
 ### Flow Diagram
 
+Health Check Flow
 ```mermaid
-%% Health Check Flow
-Client->>Router: GET /health
-Router-->>Client: 200 OK {service, status}
-
-%% Document Processing Flow
-Note over Client,Router: PUT /api/v1/process
-Client->>Router: Document + Headers
-Note right of Client: Required Headers:<br/>- Authorization: Bearer {api_key}<br/>- X-Filename: {filename}
-
-alt Invalid API Key
-    Router-->>Client: 401 Unauthorized
-else Empty Document
-    Router-->>Client: 400 Bad Request
-else Valid Request
-    Router->>Router: Detect MIME type
-    alt PDF Document
-        Router->>Tika: PUT /tika/text
-    else Other Document Types
-        Router->>Tika: PUT /tika
+sequenceDiagram
+    Client->>Router: GET /health
+    Router->>Router: Create TikaService instance
+    Router->>Tika: GET /version
+    
+    alt Tika Available
+        Tika-->>Router: 200 OK
+        Router-->>Client: 200 OK {service: ${env var APPNAME}, status: "healthy"}
+    else Tika Unavailable
+        Tika-->>Router: Error/No Response
+        Router-->>Client: 503 Service Unavailable<br/>{detail: "Tika service is not available"}
     end
-    Tika-->>Router: Extracted Content
-    Router->>Router: Format Response
-    Router-->>Client: 200 OK {content, metadata}
-end
+```
+
+Document Processing Flow
+```mermaid
+sequenceDiagram
+   Note over Client,Router: PUT /api/v1/process
+   Client->>Router: Document + Headers
+   Note right of Client: Required Headers:<br/>- Authorization: Bearer {api_key}<br/>- X-Filename: {filename}
+   
+   alt Invalid API Key
+       Router-->>Client: 401 Unauthorized
+   else Empty Document
+       Router-->>Client: 400 Bad Request
+   else Valid Request
+       Router->>Router: Detect MIME type
+       alt PDF Document
+           Router->>Tika: PUT /tika/text
+       else Other Document Types
+           Router->>Tika: PUT /tika
+       end
+       Tika-->>Router: Extracted Content
+       Router->>Router: Format Response
+       Router-->>Client: 200 OK {content, metadata}
+   end
 ```
 
 ### Endpoints Details
