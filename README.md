@@ -193,7 +193,7 @@ Document Processing Flow
 sequenceDiagram
    Note over Client,Router: PUT /api/v1/process
    Client->>Router: Document + Headers
-   Note right of Client: Required Headers:<br/>- Authorization: Bearer {api_key}<br/>- X-Filename: {filename}
+   Note right of Client: Required Headers:<br/>- Authorization: Bearer {api_key}
    
    alt Invalid API Key
        Router-->>Client: 401 Unauthorized
@@ -223,7 +223,7 @@ sequenceDiagram
    - Endpoint: `PUT /api/v1/process`
    - Headers:
      - `Authorization: Bearer {api_key}` - Required for authentication
-     - `X-Filename: {filename}` - Name of the file being processed
+     - `X-Filename: {filename}` - Optional, Name of the file being processed
      - `Content-Type: {mime_type}` - Optional, will be auto-detected if not provided
    - Body: Raw document content
    - Response:
