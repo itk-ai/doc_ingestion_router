@@ -1,5 +1,13 @@
 # Document ingestion router
 
+1. [Project description](#project-description)
+2. [Developement method](#developement-method)
+3. [Testing the docker image](#testing-the-docker-image)
+4. [Environment variables](#environment-variables)
+5. [API endpoints](#api-endpoints)
+
+## Project description
+
 This is a FastAPI application to be used to route document loading requests from OpenWebUI to a tika server.
 
 The current [`TikaLoader` class](https://github.com/open-webui/open-webui/blob/5eca495d3e3b3066e7831141ed2adffbd6d179b4/backend/open_webui/retrieval/loaders/main.py#L91) for OWUI:
