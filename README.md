@@ -133,7 +133,7 @@ class ExternalDocumentLoader(BaseLoader):
             )
 ```
 
-and simply route the request to the appropiate tika endpoint.
+and route the request to the appropiate tika endpoint.
 
 ## Developement method
 
@@ -174,7 +174,7 @@ To test this setup:
    
 ## Environment variables
 
-See [template.env](template.env) for the needed environment variables 
+See [.env.example](.env.example) for the necessary environment variables 
 
 ## API Endpoints
 

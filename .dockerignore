@@ -1,0 +1,9 @@
+.github
+docs
+.env
+.env.*
+__pycache__
+.idea
+.venv
+docker-compose*
+.env.example

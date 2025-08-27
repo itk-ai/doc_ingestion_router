@@ -4,22 +4,36 @@ FROM python:3.11-slim
 ENV PYTHONDONTWRITEBYTECODE=1 \
     PYTHONUNBUFFERED=1
 
-# Install system dependencies, including libmagic1 for MIME type detection
-RUN apt-get update && apt-get install -y \
-    libmagic1 \
-    && rm -rf /var/lib/apt/lists/*
+ARG GID=1042
+ARG UID=1042
 
-# Set working directory
+# Ensure packages are available.
+RUN apt-get update
+
+# Install system dependencies, including libmagic1 for MIME type detection
+RUN DEBIAN_FRONTEND=noninteractive \
+    apt-get install -qy \
+    libmagic1 \
+ && rm -rf /var/lib/apt/lists/*
+
 WORKDIR /app
 
-# Copy requirements file
-COPY requirements.txt .
-
-# Install Python dependencies
-RUN pip install --no-cache-dir -r requirements.txt
-
-# Copy project files
 COPY . .
+RUN pip install --upgrade pip
+RUN pip install uv
+RUN pip install .
+
+# Add deploy use to match server.
+RUN addgroup --gid ${GID} deploy \
+    && useradd --gid ${GID} --uid ${UID} --home-dir /home/deploy --create-home --shell /bin/bash deploy
+
+# Ensure app is owned by deploy
+RUN chown -R deploy:deploy /app
+
+USER deploy
+
+# Make port 8000 available to the world outside this container
+EXPOSE 8000
 
 # Command to run the application
 CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000"]

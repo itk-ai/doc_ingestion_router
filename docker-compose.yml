@@ -2,7 +2,7 @@ services:
   app:
     build: .
     ports:
-      - "${PORT:-8000}:8000"
+      - "8000"
     environment:
       - API_KEY=${API_KEY:-default_test_key}
       - APP_NAME=${APP_NAME:-Document Ingestion Router}
@@ -35,8 +35,8 @@ services:
 
   # Local Tika container for development
   tika:
-    image: apache/tika:latest
+    image: itkdev/tika:3.2.0
     ports:
-      - "9998:9998"
+      - "9998"
     profiles:
       - dev

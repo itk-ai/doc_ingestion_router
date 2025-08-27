@@ -6,7 +6,7 @@ readme = "README.md"
 authors = [
     { name = "Daniel Andreasen", email = "akda@aarhus.dk" }
 ]
-requires-python = ">=3.13"
+requires-python = ">=3.11"
 dependencies = [
     "fastapi>=0.116.1",
     "html2text>=2025.4.15",
@@ -26,7 +26,3 @@ dependencies = [
 
 [project.scripts]
 doc-ingestion-router = "doc_ingestion_router:main"
-
-[build-system]
-requires = ["hatchling"]
-build-backend = "hatchling.build"
