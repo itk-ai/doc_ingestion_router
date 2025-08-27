@@ -139,9 +139,9 @@ and simply route the request to the appropiate tika endpoint.
 
 This is co-created with the pycharm AI assistant using the Claude 3.5 Sonnet.
 
-- The summary of the project requirements can be seen [here](AI_project_description.md)
-- The [AI suggested project structure](AI_project_structure.md)
-- The [AI project implementation plan](AI_project_implementation_plan.md)
+- The summary of the project requirements can be seen [here](docs/AI_project_description.md)
+- The [AI suggested project structure](docs/AI_project_structure.md)
+- The [AI project implementation plan](docs/AI_project_implementation_plan.md)
 
 ## Testing the docker image
 
