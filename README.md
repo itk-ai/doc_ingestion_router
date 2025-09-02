@@ -1,10 +1,11 @@
 # Document ingestion router
 
 1. [Project description](#project-description)
-2. [Developement method](#developement-method)
-3. [Testing the docker image](#testing-the-docker-image)
-4. [Environment variables](#environment-variables)
-5. [API endpoints](#api-endpoints)
+2. [Installation (production)](#installation-production)
+3. [Installation (development)](#installation-development)
+4. [Testing the docker image](#testing-the-docker-image)
+5. [Environment variables](#environment-variables)
+6. [API endpoints](#api-endpoints)
 
 ## Project description
 
@@ -132,6 +133,106 @@ class ExternalDocumentLoader(BaseLoader):
                 f"Error loading document: {response.status_code} {response.text}"
             )
 ```
+
+## Installation (production)
+
+There are two common ways to run this service in production: using Docker or installing the Python package and running with Uvicorn.
+
+Prerequisites:
+- A running Apache Tika server reachable from this service (set TIKA_BASE_URL)
+- API key to protect this service (API_KEY)
+- For Debian/Ubuntu when running without Docker: install libmagic1 (apt install libmagic1)
+
+Option A) Docker (recommended)
+
+- Build image and run with docker-compose using the prod profile:
+
+```bash
+docker compose --profile prod up --build -d
+```
+
+Environment expected (supply via .env file or environment):
+- APP_NAME
+- API_KEY
+- TIKA_BASE_URL
+- Optionally TIKA_USER and TIKA_PASSWORD if your Tika requires auth
+
+The app listens on port 8000 inside the container. Map ports as needed, e.g. with docker run -p 8000:8000 ... if not using compose.
+
+Option B) System install (uv/pip)
+
+- Create and activate a Python 3.11 virtual environment.
+- Install the package:
+
+Using uv (preferred if you have uv.lock):
+```bash
+uv pip install .
+```
+Using pip:
+```bash
+pip install .
+```
+
+- Ensure libmagic is installed on the host (Debian/Ubuntu: apt install libmagic1)
+- Provide configuration via environment variables or a .env file (copy .env.example to .env and edit values):
+
+```bash
+cp .env.example .env
+# edit .env
+```
+
+- Run the app with Uvicorn:
+```bash
+uvicorn app.main:app --host 0.0.0.0 --port 8000
+```
+
+## Installation (development)
+
+Prerequisites:
+- Python 3.11+
+- uv or pip
+- Docker (optional, for local Tika)
+
+Steps:
+1) Create a virtual environment and install with dev extras:
+
+Using uv:
+```bash
+uv venv
+. .venv/bin/activate
+uv pip install -e .[dev]
+```
+Using pip:
+```bash
+python -m venv .venv
+. .venv/bin/activate
+pip install -e ".[dev]"
+```
+
+2) Copy environment template and adjust values:
+```bash
+cp .env.example .env
+```
+
+3) Start local Tika and the app using Docker for a full local stack (hot-reload is available when running app locally):
+```bash
+docker compose --profile dev up --build -d
+```
+This starts a local Tika at http://localhost:9998 and the app container mounting your code.
+
+Alternatively, run the app directly on your host with auto-reload (requires TIKA_BASE_URL to point to a Tika instance):
+```bash
+uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload
+```
+
+4) Run tests:
+```bash
+pytest
+```
+
+Notes:
+- If running on Debian/Ubuntu without Docker, install libmagic1 for MIME detection: apt install libmagic1
+- Optional dependencies for development are specified in pyproject.toml under [project.optional-dependencies].
 
 and route the request to the appropiate tika endpoint.
 
