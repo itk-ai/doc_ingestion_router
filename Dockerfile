@@ -11,9 +11,11 @@ ARG UID=1042
 RUN apt-get update
 
 # Install system dependencies, including libmagic1 for MIME type detection
+# Also install media-types to ensure Python's mimetypes has a complete /etc/mime.types (e.g., docx)
 RUN DEBIAN_FRONTEND=noninteractive \
     apt-get install -qy \
     libmagic1 \
+    media-types \
  && rm -rf /var/lib/apt/lists/*
 
 WORKDIR /app

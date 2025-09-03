@@ -174,6 +174,7 @@ pip install .
 ```
 
 - Ensure libmagic is installed on the host (Debian/Ubuntu: apt install libmagic1)
+- Ensure media-types is installed on the host (Debian/Ubuntu: apt install media-types). Required by the fallback detection.
 - Provide configuration via environment variables or a .env file (copy .env.example to .env and edit values):
 
 ```bash
