@@ -219,6 +219,7 @@ cp .env.example .env
 docker compose --profile dev up --build -d
 ```
 This starts a local Tika at http://localhost:9998 and the app container mounting your code.
+Note: The dev Docker Compose profile builds the image with development dependencies (.[dev]) installed via a build-arg.
 
 Alternatively, run the app directly on your host with auto-reload (requires TIKA_BASE_URL to point to a Tika instance):
 ```bash
@@ -227,7 +228,7 @@ uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload
 
 4) Run tests:
 ```bash
-pytest
+docker compose exec app-dev pytest
 ```
 
 Notes:

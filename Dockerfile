@@ -18,10 +18,14 @@ RUN DEBIAN_FRONTEND=noninteractive \
 
 WORKDIR /app
 
+# Build-time flag to control dev dependencies installation (used by compose dev profile)
+ARG INSTALL_DEV=false
+
 COPY . .
 RUN pip install --upgrade pip
 RUN pip install uv
-RUN pip install .
+# Install project with or without dev extras based on INSTALL_DEV
+RUN if [ "$INSTALL_DEV" = "true" ]; then pip install -e .[dev]; else pip install .; fi
 
 # Add deploy use to match server.
 RUN addgroup --gid ${GID} deploy \

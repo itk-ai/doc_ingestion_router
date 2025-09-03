@@ -13,6 +13,10 @@ services:
   app-dev:
     extends:
       service: app
+    build:
+      context: .
+      args:
+        INSTALL_DEV: "true"
     environment:
       - TIKA_BASE_URL=http://tika:9998
       - TIKA_USER=""
