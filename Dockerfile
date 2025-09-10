@@ -11,17 +11,23 @@ ARG UID=1042
 RUN apt-get update
 
 # Install system dependencies, including libmagic1 for MIME type detection
+# Also install media-types to ensure Python's mimetypes has a complete /etc/mime.types (e.g., docx)
 RUN DEBIAN_FRONTEND=noninteractive \
     apt-get install -qy \
     libmagic1 \
+    media-types \
  && rm -rf /var/lib/apt/lists/*
 
 WORKDIR /app
 
+# Build-time flag to control dev dependencies installation (used by compose dev profile)
+ARG INSTALL_DEV=false
+
 COPY . .
 RUN pip install --upgrade pip
 RUN pip install uv
-RUN pip install .
+# Install project with or without dev extras based on INSTALL_DEV
+RUN if [ "$INSTALL_DEV" = "true" ]; then pip install -e .[dev]; else pip install .; fi
 
 # Add deploy use to match server.
 RUN addgroup --gid ${GID} deploy \

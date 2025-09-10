@@ -73,9 +73,10 @@ def test_process_document_using_data_field():
         "Content-Type": "text/plain",
         "X-Filename": "test.txt"
     }
+    # httpx >=0.28 deprecates using 'data' for raw bytes; use 'content' to avoid warnings
     response = client.put(
         "/api/v1/process",
-        data=b"test content",
+        content=b"test content",
         headers=headers
     )
 
