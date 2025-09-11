@@ -1,34 +1,37 @@
-# This implement basic token security
-# https://fastapi.tiangolo.com/reference/security/?h=apikeyheader#fastapi.security.APIKeyHeader--usage
-# For more advance use maybe start out by looking to https://fastapi.tiangolo.com/tutorial/security/
-
-from fastapi import Security, HTTPException, status
-from fastapi.security import APIKeyHeader
+from fastapi import Security, HTTPException
+from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
 from app.config import settings
 
-api_key_header = APIKeyHeader(name="Authorization", auto_error=False)
+# Create the security scheme for Bearer tokens
+bearer_scheme = HTTPBearer(auto_error=False)
 
 
-async def validate_api_key(api_key: str = Security(api_key_header)) -> str:
-    if not api_key:
+def get_bearer_token(
+    credentials: HTTPAuthorizationCredentials = Security(bearer_scheme),
+):
+    """
+    Validate the Bearer token from the Authorization header.
+
+    Args:
+        credentials: The Bearer token credentials extracted from the Authorization header
+
+    Returns:
+        The validated token if authentication is successful
+
+    Raises:
+        HTTPException: If authentication fails
+    """
+    if credentials is None:
         raise HTTPException(
-            status_code=status.HTTP_401_UNAUTHORIZED,
-            detail="Authorization header is missing"
+            status_code=401, detail="Missing Authorization header with Bearer token"
         )
 
-    # Extract token from "Bearer <token>"
-    if not api_key.startswith("Bearer "):
+    if credentials.scheme.lower() != "bearer":
         raise HTTPException(
-            status_code=status.HTTP_401_UNAUTHORIZED,
-            detail="Invalid authorization header format. Must start with 'Bearer'"
+            status_code=401, detail="Authorization header must use Bearer scheme"
         )
 
-    token = api_key.replace("Bearer ", "")
+    if credentials.credentials != settings.API_KEY:
+        raise HTTPException(status_code=403, detail="Could not validate credentials")
 
-    if token != settings.API_KEY:
-        raise HTTPException(
-            status_code=status.HTTP_401_UNAUTHORIZED,
-            detail="Invalid API key"
-        )
-
-    return token
+    return credentials.credentials

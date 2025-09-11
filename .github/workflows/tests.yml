@@ -1,0 +1,38 @@
+name: Tests
+
+on:
+  pull_request:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Start services with Docker Compose
+        env:
+          PORT: ${{ env.TEST_PORT }}
+        run: |
+          docker compose --profile dev build --pull --no-cache
+          docker compose --profile dev up -d --wait --wait-timeout 60
+          sleep 10  # Give services time to start
+
+      - name: Run pytest
+        env:
+          TEST_PORT: ${{ env.TEST_PORT }}
+          API_KEY: default_test_key
+          APP_NAME: Document Ingestion Router
+          TIKA_USER: dummy
+          TIKA_PASSWORD: dummy
+          TIKA_BASE_URL: http://dummy.url
+        run: |
+          docker compose exec app-dev pytest
+
+      - name: Clean up
+        if: always()
+        run: docker compose --profile dev down

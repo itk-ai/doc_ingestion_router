@@ -3,14 +3,16 @@ import requests
 from typing import Dict, Any, Tuple
 import mimetypes
 from loguru import logger
+
 # TODO: Add logging of what is requested and where it is sent to
 from fastapi import HTTPException
 from html2text import HTML2Text
 import magic
 
+
 class TikaService:
     def __init__(self):
-        self.base_url = settings.tika_url_with_auth.rstrip('/')
+        self.base_url = settings.tika_url_with_auth.rstrip("/")
 
     async def is_available(self) -> bool:
         try:
@@ -43,15 +45,17 @@ class TikaService:
             if guessed_type:
                 return guessed_type
 
-        logger.warning(f"Failed to detect MIME type using application/octet-stream as a fallback.")
+        logger.warning(
+            f"Failed to detect MIME type using application/octet-stream as a fallback."
+        )
 
         return "application/octet-stream"
 
     def _choose_tika_endpoint(self, mime_type: str) -> str:
         """
-        Choose appropriate Tika endpoint based on MIME type
+        Choose the appropriate Tika endpoint based on the MIME type
         """
-        # All documents beside pdfs should use the main tika endpoint for HTML output
+        # All documents beside PDFSs should use the main tika endpoint for HTML output
         endpoint = "tika"
         # PDF documents should use the text endpoint
         if mime_type == "application/pdf":
@@ -60,13 +64,10 @@ class TikaService:
         return endpoint
 
     async def process_document(
-            self,
-            file_content: bytes,
-            filename: str = None,
-            provided_mime_type: str = None
+        self, file_content: bytes, filename: str = None, provided_mime_type: str = None
     ) -> Tuple[str, Dict[str, Any]]:
         """
-        Process document through appropriate Tika endpoint
+        Process the document through the appropriate Tika endpoint
         """
         logger_msg = "Processing document"
         if provided_mime_type:
@@ -74,14 +75,16 @@ class TikaService:
         if filename:
             logger_msg += f" with name {filename}"
         else:
-            content = file_content.decode('utf-8', 'ignore')
+            content = file_content.decode("utf-8", "ignore")
             content_len = len(content)
-            content = content[:min(1024, content_len)]
+            content = content[: min(1024, content_len)]
             logger_msg += f" which content starts with:\n{content}"
         logger.info(logger_msg)
         try:
-            # Use provided MIME type or detect it
-            mime_type = provided_mime_type or self._detect_mime_type(file_content, filename)
+            # Use the provided MIME type or detect it
+            mime_type = provided_mime_type or self._detect_mime_type(
+                file_content, filename
+            )
 
             # Prepare headers
             headers = {"Content-Type": mime_type}
@@ -91,17 +94,15 @@ class TikaService:
             # Choose endpoint based on MIME type
             endpoint = self._choose_tika_endpoint(mime_type)
 
-            # Send request to Tika
+            # Send a request to Tika
             response = requests.put(
-                f"{self.base_url}/{endpoint}",
-                data=file_content,
-                headers=headers
+                f"{self.base_url}/{endpoint}", data=file_content, headers=headers
             )
 
             if not response.ok:
                 raise HTTPException(
                     status_code=response.status_code,
-                    detail=f"Tika service error: {response.text}"
+                    detail=f"Tika service error: {response.text}",
                 )
 
             # Handle response based on endpoint
@@ -127,6 +128,5 @@ class TikaService:
         except Exception as e:
             logger.error(f"Error processing document: {str(e)}")
             raise HTTPException(
-                status_code=500,
-                detail=f"Error processing document: {str(e)}"
+                status_code=500, detail=f"Error processing document: {str(e)}"
             )

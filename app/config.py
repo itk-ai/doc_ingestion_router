@@ -2,8 +2,9 @@ from pydantic_settings import BaseSettings, SettingsConfigDict
 from urllib.parse import urlparse, urlunparse
 from loguru import logger
 
+
 class Settings(BaseSettings):
-    model_config = SettingsConfigDict(env_file='.env', env_file_encoding='utf-8')
+    model_config = SettingsConfigDict(env_file=".env", env_file_encoding="utf-8")
 
     APP_NAME: str = "Document Ingestion Router"
 
@@ -18,14 +19,19 @@ class Settings(BaseSettings):
         """Constructs Tika URL with authentication credentials"""
         parsed = urlparse(self.TIKA_BASE_URL)
         netloc = f"{self.TIKA_USER}:{self.TIKA_PASSWORD}@{parsed.netloc}"
-        return urlunparse((
-            parsed.scheme,
-            netloc,
-            parsed.path,
-            parsed.params,
-            parsed.query,
-            parsed.fragment
-        ))
+        return urlunparse(
+            (
+                parsed.scheme,
+                netloc,
+                parsed.path,
+                parsed.params,
+                parsed.query,
+                parsed.fragment,
+            )
+        )
+
 
 settings = Settings()
-logger.info(f"Loaded settings: {settings.model_dump(exclude=['API_KEY', 'TIKA_PASSWORD'])}")
+logger.info(
+    f"Loaded settings: {settings.model_dump(exclude=['API_KEY', 'TIKA_PASSWORD'])}"
+)

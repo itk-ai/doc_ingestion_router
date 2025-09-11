@@ -16,6 +16,7 @@ RUN DEBIAN_FRONTEND=noninteractive \
     apt-get install -qy \
     libmagic1 \
     media-types \
+    curl \
  && rm -rf /var/lib/apt/lists/*
 
 WORKDIR /app
