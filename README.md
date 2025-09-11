@@ -236,9 +236,9 @@ Notes:
 - If running on Debian/Ubuntu without Docker, install libmagic1 for MIME detection: apt install libmagic1
 - Optional dependencies for development are specified in pyproject.toml under [project.optional-dependencies].
 
-and route the request to the appropiate tika endpoint.
+and route the request to the appropriate tika endpoint.
 
-## Developement method
+## Development method
 
 This is co-created with the pycharm AI assistant using the Claude 3.5 Sonnet.
 

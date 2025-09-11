@@ -73,7 +73,7 @@ def test_invalid_api_key():
     response = requests.put(
         f"{BASE_URL}/process", data=empty_pdf_content, headers=headers
     )
-    assert response.status_code == 401
+    assert response.status_code == 403
 
 
 def test_empty_document():

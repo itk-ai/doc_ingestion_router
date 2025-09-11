@@ -53,9 +53,9 @@ class TikaService:
 
     def _choose_tika_endpoint(self, mime_type: str) -> str:
         """
-        Choose appropriate Tika endpoint based on MIME type
+        Choose the appropriate Tika endpoint based on the MIME type
         """
-        # All documents beside pdfs should use the main tika endpoint for HTML output
+        # All documents beside PDFSs should use the main tika endpoint for HTML output
         endpoint = "tika"
         # PDF documents should use the text endpoint
         if mime_type == "application/pdf":
@@ -67,7 +67,7 @@ class TikaService:
         self, file_content: bytes, filename: str = None, provided_mime_type: str = None
     ) -> Tuple[str, Dict[str, Any]]:
         """
-        Process document through appropriate Tika endpoint
+        Process the document through the appropriate Tika endpoint
         """
         logger_msg = "Processing document"
         if provided_mime_type:
@@ -81,7 +81,7 @@ class TikaService:
             logger_msg += f" which content starts with:\n{content}"
         logger.info(logger_msg)
         try:
-            # Use provided MIME type or detect it
+            # Use the provided MIME type or detect it
             mime_type = provided_mime_type or self._detect_mime_type(
                 file_content, filename
             )
@@ -94,7 +94,7 @@ class TikaService:
             # Choose endpoint based on MIME type
             endpoint = self._choose_tika_endpoint(mime_type)
 
-            # Send request to Tika
+            # Send a request to Tika
             response = requests.put(
                 f"{self.base_url}/{endpoint}", data=file_content, headers=headers
             )

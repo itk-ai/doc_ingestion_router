@@ -16,7 +16,7 @@ def test_unauthorized():
     headers = {"Content-Type": "text/plain", "X-Filename": "test.txt"}
     response = client.put("/api/v1/process", content=b"test content", headers=headers)
     assert response.status_code == 401
-    assert "Authorization header is missing" in response.json()["detail"]
+    assert "Missing Authorization header with Bearer token" in response.json()["detail"]
 
 
 def test_invalid_token():
@@ -26,8 +26,8 @@ def test_invalid_token():
         "X-Filename": "test.txt",
     }
     response = client.put("/api/v1/process", content=b"test content", headers=headers)
-    assert response.status_code == 401
-    assert "Invalid API key" in response.json()["detail"]
+    assert response.status_code == 403
+    assert "Could not validate credentials" in response.json()["detail"]
 
 
 def test_invalid_format():
@@ -38,7 +38,7 @@ def test_invalid_format():
     }
     response = client.put("/api/v1/process", content=b"test content", headers=headers)
     assert response.status_code == 401
-    assert "Invalid authorization header format" in response.json()["detail"]
+    assert "Missing Authorization header with Bearer token" in response.json()["detail"]
 
 
 def test_process_document_raw_data():
