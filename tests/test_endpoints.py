@@ -49,8 +49,7 @@ def test_process_document_raw_data():
     }
     response = client.put("/api/v1/process", headers=headers, content=b"test content")
     assert response.status_code == 200
-    assert response.json()["success"] is True
-    assert "page_content" in response.json()["content"]
+    assert "page_content" in response.json()
 
 
 def test_process_document_using_data_field():
@@ -64,8 +63,7 @@ def test_process_document_using_data_field():
     response = client.put("/api/v1/process", content=b"test content", headers=headers)
 
     assert response.status_code == 200
-    assert response.json()["success"] is True
-    assert "page_content" in response.json()["content"]
+    assert "page_content" in response.json()
 
 
 def test_process_document_raw_data_no_filename():
@@ -75,7 +73,6 @@ def test_process_document_raw_data_no_filename():
     }
     response = client.put("/api/v1/process", headers=headers, content=b"test content")
     assert response.status_code == 200
-    assert response.json()["success"] is True
 
 
 def test_process_document_no_content():

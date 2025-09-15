@@ -12,11 +12,6 @@ class DocumentResponse(BaseModel):
     metadata: Dict[str, Any]
 
 
-class DocumentProcessingResponse(BaseModel):
-    success: bool
-    content: DocumentResponse
-
-
 # Not used at this point
 # TODO: Check if used by end of vibe coding
 class TikaError(BaseModel):
