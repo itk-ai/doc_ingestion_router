@@ -41,14 +41,11 @@ def test_process_pdf_document():
 
     assert response.status_code == 200
     data = response.json()
-    assert data["success"] is True
-    assert "content" in data
-    assert "page_content" in data["content"]
-    assert "metadata" in data["content"]
-    assert data["content"]["metadata"]["Content-Type"].startswith("application/pdf")
-
+    assert "page_content" in data
+    assert "metadata" in data
+    assert data["metadata"]["Content-Type"].startswith("application/pdf")
     # Check that we actually got some text content
-    assert len(data["content"]["page_content"]) > 0
+    assert len(data["page_content"]) > 0
 
 
 def test_process_docx_document():
@@ -58,10 +55,8 @@ def test_process_docx_document():
 
     assert response.status_code == 200
     data = response.json()
-    assert data["success"] is True
-    assert "content" in data
-    assert "page_content" in data["content"]
-    assert len(data["content"]["page_content"]) > 0
+    assert "page_content" in data
+    assert len(data["page_content"]) > 0
 
 
 def test_invalid_api_key():
