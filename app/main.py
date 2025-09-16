@@ -1,4 +1,5 @@
 from fastapi import FastAPI, HTTPException, Depends
+from fastapi.responses import RedirectResponse
 from app.config import settings
 from app.services.tika import TikaService
 from app.api.models import HealthResponse
@@ -21,6 +22,10 @@ Instrumentator().instrument(app).expose(
     dependencies=[Depends(get_bearer_token, use_cache=False)],
 )
 
+@app.get("/", include_in_schema=False)
+def root():
+    """Redirect to the API documentation."""
+    return RedirectResponse(url="/docs")
 
 # Public endpoints (no auth required)
 @app.get("/health", tags=["Health"], response_model=HealthResponse)
